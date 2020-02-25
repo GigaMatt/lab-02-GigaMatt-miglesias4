@@ -26,7 +26,7 @@ The approach for this lab follows the Roachism™ approach, described in lecture
 
 _In terms of abstraction, we want to define an shell interface that provides abstract function of moving data, allowing any technologies to implement interface, where the interface hides details of implementation._
 
-With this lab, we aim to abstract the core features of the shell, i.e. isolating error exception functions from I/O redirects, and separating all functions from the ```main()``` function.
+With this lab, we aim to abstract the core features of the shell, i.e. isolating error exception functions from I/O redirects, and separating all functions from the ```main()``` function. In abstracting the core featues, both contribututors are able to simotanously work on different branches (different functions of the code) in parallel, avoiding merge conflicts and conflicts with other functions of the shell.
 
 ### How To Compile & Run
 
