@@ -20,6 +20,14 @@ All source code related to this project is located in the ```/src``` subdirector
 
 All test code related to this project is located in the ```/test``` subdirectory.
 
+### Approach
+
+The approach for this lab follows the Roachism™ approach, described in lecture on 24 February 2019:
+
+_In terms of abstraction, we want to define an shell interface that provides abstract function of moving data, allowing any technologies to implement interface, where the interface hides details of implementation._
+
+With this lab, we aim to abstract the core features of the shell, i.e. isolating error exception functions from I/O redirects, and separating all functions from the ```main()``` function.
+
 ### How To Compile & Run
 
 1. Using a Linux VM, navigate to the ```/src``` subdirectory via the terminal
