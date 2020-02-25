@@ -18,15 +18,16 @@
 /* Initial Shell Greeting */
 void shell_greeting()
 {
-    clear();
-    printf("Lab 2 - Unix Shell");
+    clear();    // Clear Console Window Upon Shell initalization
+    printf("Welcome to our Unix Shell\n\t – TheMatts™\n");
+    printf("'Luck is what happens when preparation meets opportunity.' – Seneca.™\n");
 }
 
 /* Retrieve User Shell Commands */
 int user_input(char *input_value)
 {
     char *line;
-    line = readline("\n>>> "); //Command line user input
+    line = readline("\n>> "); //Command line user input
     if (strlen(line) != 0)
     {                      //Length of string
         add_history(line); //Adds to the history for tabbing back to previous command
