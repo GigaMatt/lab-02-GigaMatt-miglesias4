@@ -41,10 +41,35 @@ int user_input(char *input_value)
 void execute_command(char **parse)
 {
     pid_t p = fork();
+    int command_not_found;
 
     if (command_not_found == 1)
     {
         printf("Command Not Found\n");
-        int i = user_input();
+        int i = user_input(parse);
     }
+}
+
+
+int main(){
+    char command[100], command2[100], *parameter[20];
+    char *envp = {(char *) "PATH=/bin",0};
+
+    while(1){
+        shell_greeting(); //Optional, opens greeting
+        user_input(parameter); //Reads User Input
+        if(fork() != 0){ //Parent process
+            wait(NULL); //Waits for child process
+        }
+        if(strcmp(command2, "exit") == 0){
+            break;
+        }
+        else{
+            strcpy(command, "/bin/");
+            strcat(command, command2);
+            execve(command,parameter,envp); //Execute Command
+        }
+
+    }
+    return 0;
 }
