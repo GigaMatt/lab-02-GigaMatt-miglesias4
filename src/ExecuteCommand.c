@@ -13,7 +13,7 @@
 
 /**
  * Execute User Commands
- * @parse: 
+ * @cmds: user command
  **/
 void execute_command(char **cmds)
 {
