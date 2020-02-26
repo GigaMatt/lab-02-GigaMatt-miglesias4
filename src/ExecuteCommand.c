@@ -13,6 +13,9 @@
  * Execute User Commands
  * @cmds: user command
  **/
+
+int pipe_cmd = 0; //Refers to the (|) command in user input
+
 void execute_command(char **cmds){
     int rc = fork();
     char *parsed_usr_input;

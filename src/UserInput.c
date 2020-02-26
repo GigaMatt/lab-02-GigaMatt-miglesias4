@@ -9,6 +9,7 @@
 */
 #include "UnixShell.h"
 #include <stdio.h>
+#include <stdlib.h>
 #define LSH_RL_BUFSIZE 1024
 
 /**
@@ -18,21 +19,61 @@
  **/
 char *user_input(char *input_value)
 {
-
     char *user_line = NULL;
     ssize_t buffer_size = 0; //ssize_t integrates return value of valid size (includes negative values)
     getline(&user_line, &buffer_size, stdin); //getline() will allocate memory using buffer_
     //user_line is the read line
 
     //Performing parse on each line of the user_input value
-    parse_user_input(user_line);
+    char *parsed_line = parse_user_input(user_line);
 
     //Switch case statements in execute_command in ExecuteCommand.c file
-    return 1;
+    return parsed_line;
 }
 
 char *parse_user_input(char *line){
-    //code here
+    char *token = strtok(*line, " ");
+    int counter = 0;
+    while(*token != NULL){
+        counter++;
+    }
 
     return ;
+}
+
+/* This function determines if each character in the user input line is valid */
+char is_Valid_Char(char user_input_char){
+    // Special Characters: includes " " and up to 126
+    if (user_input_char >= 32 & user_input_char <= 126){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+    return;
+}
+
+/* This function counts the number of tokens from the user input line */
+char count_tokens(char *user_cmd_token){
+    int cmd_count = 0, param_count = 0, num_words = 1;
+    while(is_Valid_Char(user_cmd_token[param_count])==0)
+    {
+        cmd_count++;
+        param_count++;
+    }
+    param_count = string_length(user_cmd_token);
+
+    while(is_Valid_Char(user_cmd_token[param_count])== 0)
+    {
+        param_count--;
+    }
+
+    // Find the difference to separate out the words
+    while(cmd_count < param_count)
+    {
+        if((is_Valid_Char(user_cmd_token[cmd_count])==0) && (is_Valid_Char(user_cmd_token[cmd_count+1])==1))
+            num_words++;
+        cmd_count++;
+    }
+    return num_words;
 }

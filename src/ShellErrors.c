@@ -9,7 +9,6 @@
 */
 
 #include "UnixShell.h"
-char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program terminated with exit code %s";
 
 /**
  * Prints Expected User Error
