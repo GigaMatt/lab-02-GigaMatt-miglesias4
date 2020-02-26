@@ -8,6 +8,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+/* Global variables for command not found of command fails */
+char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program terminated with exit code %s";
+
 /* Initial Shell Greeting */
 void shell_greeting();
 
