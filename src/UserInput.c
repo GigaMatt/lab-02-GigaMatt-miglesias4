@@ -25,5 +25,6 @@ char *user_input(char *input_value)
         strcpy(input_value, line);
         return 0;
     }
+
     return 1;
 }
