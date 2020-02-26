@@ -15,7 +15,7 @@ char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program te
 void shell_greeting();
 
 /* Retrieve User Shell Commands */
-int user_input(char *input_value);
+char *user_input(char *input_value);
 
 /* Execute User Commands */
 void execute_command(char **parse);

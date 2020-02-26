@@ -24,27 +24,12 @@ void shell_greeting(char *ps1_prompt, char *ps1_value)
     printf("'Luck is what happens when preparation meets opportunity.'\n\t – Seneca.™\n");
 
     /* Display $PS1 or Valid Prompt String */
-    if ((ps1_prompt != NULL) && (ps1_prompt[0] == '\0'))
-    {
+    if ((ps1_prompt != NULL) && (ps1_prompt[0] == '\0')){
         char *default_prompt = "$";
         write(STDOUT_FILENO, default_prompt, 2);
     }
-    else
-    {
+    else{
         write(STDOUT_FILENO, ps1_prompt, 2);
     }
-
-    ////////// OR //////////
-
-    /* Display $PS1 String */
-    if (ps1_value)
-    {
-        write(STDOUT_FILENO, ps1_prompt, 2);
-    }
-    /* Display Default Prompt String */
-    else
-    {
-        char *default_prompt = "$";
-        write(STDOUT_FILENO, default_prompt, 2);
-    }
+    
 }

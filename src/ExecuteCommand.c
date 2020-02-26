@@ -13,17 +13,46 @@
  * Execute User Commands
  * @cmds: user command
  **/
-void execute_command(char **cmds)
-{
-    /* Call Fork Command */
-    execve("p1fork.c",parameter,envp);
+void execute_command(char **cmds){
+    int rc = fork();
+    char *parsed_usr_input;
+    /* Create Pipe */
+        int pid[2];
+        pipe(pid);
 
-    // Check for "exit" and "cd"
+    /* An issue occured while piping */
+    if(pid < 0){
+        printf("Pipe Failed. Quitting Program.\n");
+        exit(1);
+    }
 
-    int command_not_found;
-
-    if (command_not_found == 1)
+    if (rc < 0)
     {
-        printf("Command Not Found\n");
+    /* An issue occured while piping */
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    }
+    else if (rc == 0)
+    {
+        // child (new process)
+        printf("Child (pid:%d)\n", (int)getpid());
+        close(pid[1]);                                  // Close the write end of the pipe
+        read(pid[0], parsed_usr_input, sizeof(parsed_usr_input));   // Read the user input
+        close(pid[0]);                                  // Close the read end of the pipe
+        exit(0);
+
+        //call everything in the commands 
+
+        //Switch cases hereeeeeeeeee
+        //Include the $PATH
+    }
+    else
+    {
+        // Parent goes down this path (original process)
+        printf("Parent of %d (pid:%d)\n",
+                rc, (int)getpid());
+        close(pid[0]);                                  // Close the read end of the pipe
+        write(pid[1], parsed_usr_input, sizeof(parsed_usr_input));  // Write the user enput
+        close(pid[1]); 
     }
 }
