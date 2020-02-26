@@ -31,6 +31,7 @@ char *user_input(char *input_value)
     return parsed_line;
 }
 
+/* This function uses user input line and performs tokenization to determine command variable and parameter variable */ 
 char *tokenize(char *line){
     int pos = 0, token_length = count_tokens(line);
     char** tokens = (char**) malloc((token_length+1) * sizeof(char*));
@@ -86,4 +87,36 @@ char count_tokens(char *user_cmd_token){
         cmd_count++;
     }
     return num_words;
+}
+
+/* Finds the first token character in the token */
+char *find_token_start(char *token_str)
+{
+    if (count_words(token_str) > 0)
+    {                                // Determine if more than zero strings exist
+        char *temp_char_array = token_str; // Duplicate array for checking
+        while (*temp_char_array)
+        {
+            if ((is_Valid_Char(temp_char_array[0])) == 1)
+            {                           
+                return temp_char_array; // Return the next string, beginning with valid chars
+            }
+            *temp_char_array++;
+        }
+    }
+    return token_str; // Return original array if no valid chars exist
+}
+
+/* Finds the end of current token */
+char *find_token_end(char *token_str)
+{
+    while (is_Valid_Char(*token_str))
+    {
+        token_str++;
+        if (*token_str == 32)
+        {
+            return token_str; // Return the end of current string
+        }
+    }
+    return "0"; // Return original array if no valid chars exist
 }
