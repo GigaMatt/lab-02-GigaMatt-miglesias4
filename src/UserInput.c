@@ -13,7 +13,7 @@
 
 /**
  * Retrieve User Shell Commands 
- * @input_value: User Shell Command
+ * @input_value: user command
  **/
 char *user_input(char *input_value)
 {

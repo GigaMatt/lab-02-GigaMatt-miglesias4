@@ -9,17 +9,21 @@
 */
 
 #include "UnixShell.h"
-
 char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program terminated with exit code %s";
 
-
-/* Prints Commmand  */
-void command_not_found(char *error_message, char *cmd)
+/**
+ * Prints Expected User Error
+ * @cmd: the user's command
+ **/
+void command_not_found(char *cmd)
 {
     printf("%s: %s", cmd, cmd_not_found_prompt);
 }
 
-/*  */
+/**
+ * Prints Expected User Error
+ * @exit_code: code returned to parent process
+  */
 void command_failure(int exit_code)
 {
     printf("%s: %i", cmd_fail_prompt, exit_code);
