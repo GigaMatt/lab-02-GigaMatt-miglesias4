@@ -14,7 +14,6 @@
  * @cmds: user command
  **/
 
-int pipe_cmd = 0; //Refers to the (|) command in user input
 
 void execute_command(char **cmds){
     int rc = fork();
@@ -31,17 +30,18 @@ void execute_command(char **cmds){
 
     if (rc < 0)
     {
-    /* An issue occured while piping */
+    /* An issue occured while forking */
         fprintf(stderr, "fork failed\n");
         exit(1);
     }
     else if (rc == 0)
     {
-        // child (new process)
+        //Child (new process)
         printf("Child (pid:%d)\n", (int)getpid());
         close(pid[1]);                                  // Close the write end of the pipe
         read(pid[0], parsed_usr_input, sizeof(parsed_usr_input));   // Read the user input
         close(pid[0]);                                  // Close the read end of the pipe
+        //do something
         exit(0);
 
         //call everything in the commands 
@@ -56,6 +56,7 @@ void execute_command(char **cmds){
                 rc, (int)getpid());
         close(pid[0]);                                  // Close the read end of the pipe
         write(pid[1], parsed_usr_input, sizeof(parsed_usr_input));  // Write the user enput
-        close(pid[1]); 
+        //do something
+        close(pid[1]);                                  //Close the write end of the pipe
     }
 }

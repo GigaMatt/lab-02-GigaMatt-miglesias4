@@ -31,18 +31,28 @@ char *user_input(char *input_value)
     return parsed_line;
 }
 
-char *parse_user_input(char *line){
-    char *token = strtok(*line, " ");
-    int counter = 0;
-    while(*token != NULL){
-        counter++;
-    }
+char *tokenize(char *line){
+    int pos = 0, token_length = count_tokens(line);
+    char** tokens = (char**) malloc((token_length+1) * sizeof(char*));
 
-    return ;
+    while(pos < token_length)
+    {
+        line = find_word_start(line);
+        char* tokenized_word = token_copy(line);
+        line = find_word_end(line);
+        tokens[pos] = tokenized_word;
+
+        pos++;
+    }
+    return tokens;
 }
 
 /* This function determines if each character in the user input line is valid */
 char is_Valid_Char(char user_input_char){
+
+    if(user_input_char == 124){
+        pipe_cmd = 1; // There is a pipe (|) in the user's argument
+    }
     // Special Characters: includes " " and up to 126
     if (user_input_char >= 32 & user_input_char <= 126){
         return 1;
