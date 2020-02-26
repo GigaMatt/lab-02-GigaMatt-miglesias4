@@ -24,9 +24,9 @@ All test code related to this project is located in the ```/test``` subdirectory
 
 The approach for this lab follows the Roachism™ approach, described in lecture on 24 February 2019:
 
-_In terms of abstraction, we want to define an shell interface that provides abstract function of moving data, allowing any technologies to implement interface, where the interface hides details of implementation._
+_In terms of abstraction, we want to define a shell interface that provides an abstract function of moving data, allowing any technology to implement the interface, where the interface hides details of implementation._
 
-With this lab, we aim to abstract the core features of the shell, i.e. isolating error exception functions from I/O redirects, and separating all functions from the ```main()``` function. In abstracting the core featues, both contribututors are able to simotanously work on different branches (different functions of the code) in parallel, avoiding merge conflicts and conflicts with other functions of the shell.
+With this lab, we aim to abstract the core features of the shell, i.e. isolating error exception functions from I/O redirects, and separating all functions from the ```main()``` function, storing all dependencies in a single ```.h``` file. In abstracting the core features, both contributors can simultaneously work on different branches (different functions of the code) in parallel, avoiding merge conflicts and conflicts with other functions of the shell. Lastly, we take components from UTEP's CS 3331 and CS 4311 courses, creating JavaDoc-like comments to promote program understanding for all project contributors.
 
 ### How To Compile & Run
 
@@ -36,11 +36,11 @@ With this lab, we aim to abstract the core features of the shell, i.e. isolating
 3. Enter the following command to execute the program</br>
   ```./<program_name>.o```
 
-### Dependancies
+### Dependencies
 
 1. A Linux-based virtual machine OR
 2. A Linux-based machine (Note: This should be reserved for advanced users)
 
 ### Warnings
 
-* Although the dependencies call for the use of a virual machine, you may use a local Linux OS to compile & execute this code. This should be reserved for advanced users
+* Although the dependencies call for the use of a virtual machine, you may use a local Linux OS to compile & execute this code. This should be reserved for advanced users

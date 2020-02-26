@@ -9,11 +9,13 @@
 */
 
 
+#include "UnixShell.h"
+
 /**
  * Retrieve User Shell Commands 
  * @input_value: User Shell Command
  **/
-int user_input(char *input_value)
+char *user_input(char *input_value)
 {
     char *line;
     line = readline("\n$ "); //Command line user input

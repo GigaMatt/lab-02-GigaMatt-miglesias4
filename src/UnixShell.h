@@ -1,6 +1,13 @@
 #ifndef _UNIXSHELL_
 #define _UNIXSHELL_
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 /* Initial Shell Greeting */
 void shell_greeting();
 

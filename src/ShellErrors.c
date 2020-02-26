@@ -8,8 +8,19 @@
  * NOTES: DUE TO ISSUES WITH GUTHUB CLASSROOM, THIS REPOSITORY IS PRIVATE UNTIL 01 MARCH 2020
 */
 
-char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program terminated with exit code N";
+#include "UnixShell.h"
 
-void expected_user_error(){
+char *cmd_not_found_prompt = "command not found", *cmd_fail_prompt = "Program terminated with exit code %s";
 
+
+/* Prints Commmand  */
+void command_not_found(char *error_message, char *cmd)
+{
+    printf("%s: %s", cmd, cmd_not_found_prompt);
+}
+
+/*  */
+void command_failure(int exit_code)
+{
+    printf("%s: %i", cmd_fail_prompt, exit_code);
 }
