@@ -19,16 +19,16 @@
  **/
 char *user_input(char *input_value)
 {
-    char *user_line = NULL;
+    char *buffer = NULL;
     ssize_t buffer_size = 0; //ssize_t integrates return value of valid size (includes negative values)
-    getline(&user_line, &buffer_size, stdin); //getline() will allocate memory using buffer_
-    //user_line is the read line
+    getline(&buffer, &buffer_size, stdin); //getline() will allocate memory using buffer_
+    //buffer is the read line
 
     //Performing parse on each line of the user_input value
-    char *parsed_line = parse_user_input(user_line);
+    char **tokens = tokenize(buffer);
 
     //Switch case statements in execute_command in ExecuteCommand.c file
-    return parsed_line;
+    return tokens;
 }
 
 /* This function uses user input line and performs tokenization to determine command variable and parameter variable */ 

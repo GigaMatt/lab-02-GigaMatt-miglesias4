@@ -42,6 +42,19 @@ void execute_command(char **cmds){
         read(pid[0], parsed_usr_input, sizeof(parsed_usr_input));   // Read the user input
         close(pid[0]);                                  // Close the read end of the pipe
         //do something
+        switch(parsed_usr_input){ //cmds??? We need the already parsed output from the user_input function in UserInput.c
+            case "ls":
+                break;
+            case "cd":
+                chdir(cmds);
+                break;
+            case "exit":
+                exit(0);
+                break;
+            default:
+                break;
+        }
+            
         exit(0);
 
         //call everything in the commands 
