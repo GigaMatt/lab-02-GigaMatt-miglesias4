@@ -11,22 +11,21 @@
 /**
  * parse_user_input - creates a list of words based on user input
  * @buffer: the string of input the user fed to the shell
- * @tokens: the list of words extracted from buffer.
  * 
  * Return: exit/error code associated with running the users command(s)
  */
-int parse_user_input(char *buffer, char **tokens)
-{
-    int pos, tokens_list = -1;
-    for (pos = 0; pos < MAX; pos++)
-    {
-        tokens[pos] = strsep(&buffer, " ");
-        tokens_list++;
-        if (tokens[pos] == NULL)
-            break;
-    }
-    return (tokens_list);
-}
+// char parse_user_input(char *buffer)
+// {
+//     int pos, tokens_list = -1;
+//     for (pos = 0; pos < MAX; pos++)
+//     {
+//         tokens[pos] = strtok(buffer, " ");
+//         tokens_list++;
+//         if (tokens[pos] == NULL)
+//             break;
+//     }
+//     return (tokens_list);
+// }
 
 /**
  * execute_single_cmd - executes single user command, invoking 'execvp'.
