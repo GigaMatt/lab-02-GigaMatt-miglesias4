@@ -8,24 +8,6 @@
 
 #include "UnixShell.h"
 
-/**
- * parse_user_input - creates a list of words based on user input
- * @buffer: the string of input the user fed to the shell
- * 
- * Return: exit/error code associated with running the users command(s)
- */
-// char parse_user_input(char *buffer)
-// {
-//     int pos, tokens_list = -1;
-//     for (pos = 0; pos < MAX; pos++)
-//     {
-//         tokens[pos] = strtok(buffer, " ");
-//         tokens_list++;
-//         if (tokens[pos] == NULL)
-//             break;
-//     }
-//     return (tokens_list);
-// }
 
 /**
  * execute_single_cmd - executes single user command, invoking 'execvp'.
@@ -36,34 +18,45 @@
 int execute_single_cmd(char **tokens)
 {
 
-    /* Fork the process */
-    pid_t subprocess = fork();
+    /* User wants to change directories */
+    if(strcmp(tokens[0], "cd") == 0){
+        //int exit_code = change_dir(tokens);
+        int exit_code = chdir(tokens[1]);
 
-    /* An issue occured while forking */
-    if (subprocess < 0)
-    {
-        printf("Fork Failed. Quitting Program.\n");
-        return (1);
+        /* Return error code associated with failed command*/
+        if(exit_code != 0) return exit_code;
     }
 
-    /* Run the child process */
-    else if (subprocess == 0)
-    {
+    //execvp
 
-        /* Execute User Command*/
-        execvp(tokens[0], tokens);
-        char *error = strerror(errno);
-        //printf("unknown command\n");
-        return 0;
-    }
+    // /* Fork the process */
+    // pid_t subprocess = fork();
 
-    /* Run the parent process */
-    else
-    {
-        int childstatus;
-        waitpid(subprocess, &childstatus, 0);
-        return 1;
-    }
+    // /* An issue occured while forking */
+    // if (subprocess < 0)
+    // {
+    //     printf("Fork Failed. Quitting Program.\n");
+    //     return (1);
+    // }
+
+    // /* Run the child process */
+    // else if (subprocess == 0)
+    // {
+
+    //     /* Execute User Command*/
+    //     execvp(tokens[0], tokens);
+    //     char *error = strerror(errno);
+    //     //printf("unknown command\n");
+    //     return 0;
+    // }
+
+    // /* Run the parent process */
+    // else
+    // {
+    //     int childstatus;
+    //     waitpid(subprocess, &childstatus, 0);
+    //     return 1;
+    // }
 }
 
 /**
@@ -103,7 +96,9 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
         dup2(pid[0], 0);
         //close(pid[0]);
 
-        execvp(second_shell_command[0], second_shell_command);
+        if(execvp(second_shell_command[0], second_shell_command) == -1){
+            printf("error");
+        }
         char *error = strerror(errno);
         return 0;
     }
@@ -115,8 +110,22 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
         dup2(pid[1], 1);
         //close(pid[1]);
 
-        execvp(first_shell_command[0], first_shell_command);
+        if(execvp(second_shell_command[0], second_shell_command) == -1){
+            printf("error");
+        }
+
         char *error = strerror(errno);
         return 0;
     }
 }
+
+// /**
+//  * change_dir - changes the current working directory path specified by the user
+//  * @tokens: the list of words (command + flags) the user wants to run
+//  * 
+//  * Return: exit/error code associated with running the users command(s)
+//  */
+// int change_dir(char ** tokens){
+//     int exit_code = chdir(tokens[1]);
+//     return exit_code;
+// }

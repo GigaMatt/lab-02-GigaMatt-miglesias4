@@ -13,8 +13,9 @@ int main()
     /* Reset variables before every input */
     int pos, user_exit, piped_command, cmd_one_length, buffer_iterator, piped_input = 0, execute = 1;
     char buffer[MAX], *tokens[MAX];
-    char ** tokens_list;
+    //char ** tokens_list;
     char *first_shell_command[MAX] = {0}, *second_shell_command[MAX] = {0};
+    
     /* Display greeting similar to UTEP CS 3432 VM greeting */
     shell_greeting();
 
@@ -31,91 +32,81 @@ int main()
             break;
         }
 
+        /* Get List of Tokens */
+
         char* start_word = find_word_start(buffer);
         char* end_word = find_word_end(buffer);
         int word_length = count_words(buffer);
-        char **user_tokens = (char**) malloc(word_length);  // Consider sending in a pointer
+        char **user_tokens = (char**) malloc(word_length);
         user_tokens = tokenize(buffer);
         print_tokens(user_tokens);
 
+        /* Check for user terminating program*/
+        if(strcmp(user_tokens[0], "exit") == 0 || strcmp(user_tokens[0], "EXIT") == 0){
+            printf("\nTERMINATING SHELL.\n");
+            break;
+        }
 
-        printf("I am here 0\n");
+        /* Check for user piping commands */
+        for (pos = 0; pos < word_length; pos++)
+        {
+            piped_input = strcmp(user_tokens[pos], "|");
+            if (piped_input == 0)
+            {
+                cmd_one_length = pos;
+                break;
+            }
+        }
 
-        /* Get List of Tokens */
-        // tokens_list = parse_user_input(buffer);
-        //print_tokens(tokens_list);
-        
+        printf("Pipe Position: %d\n", cmd_one_length);
 
-        //         int it = 0;
-        //         while (tokens_list[it])
-        //         { // Loop through the string & individually print the chars
-        //             printf("[%d] = %s\n", it, tokens_list[it]);
-        //             it++;
-        //         }
-        // }
-        //         printf("I am here 1\n");
+        /* One command exists: Execute the single command */
+        if (piped_input == 1)
+        {
+            if (execute_single_cmd(user_tokens) == 0)
+            {
+                break;
+            }
+        }
 
-        //         /* Check for user terminating program*/
-        //         user_exit = strcmp(tokens[0], "exit");
-        //         if (user_exit == 0){
-        //             printf("Terminating shell.\n");
-        //             break;
-        //         }
 
-        //         printf("I am here 1.5\n");
-        //         if (strcmp(tokens[0], "exit") == 1) break;
+        /* Two commands exist: Separate & execute the two commands */
+        if (piped_input == 0)
+        {
+            for (buffer_iterator = 0; buffer_iterator < cmd_one_length; buffer_iterator++)
+            {
+                first_shell_command[buffer_iterator] = user_tokens[buffer_iterator];
+            }
 
-        //         printf("I am here 2\n");
+            int posi = 0;
+            while(posi < buffer_iterator){
+                printf("%s ", first_shell_command[posi]);
+                posi++;
+            }
+            printf("\n");
 
-        //         /* Check for user piping commands */
-        //         for (pos = 0; pos < tokens_list; pos++)
-        //         {
-        //             piped_input = strcmp(tokens[pos], "|");
-        //             if (piped_input == 1)
-        //             {
-        //                 cmd_one_length = pos;
-        //                 break;
-        //             }
-        //         }
+            // int cmd_two_pos = 0;
+            // for (buffer_iterator = pos + 1; buffer_iterator < word_length; buffer_iterator++)
+            // {
+            //     second_shell_command[cmd_two_pos] = user_tokens[buffer_iterator];
+            //     cmd_two_pos++;
+            // }
+            // if (execute_dual_cmd(first_shell_command, second_shell_command) == 0)
+            // {
+            //     break;
+            // }
+        }
 
-        //         printf("I am here 3\n");
+        printf("I am here 4\n");
 
-        //         /* Two commands exist: Separate & execute the two commands */
-        //         if (piped_input == 1)
-        //         {
-        //             for (buffer_iterator = 0; buffer_iterator < cmd_one_length; buffer_iterator++)
-        //             {
-        //                 first_shell_command[buffer_iterator] = tokens[buffer_iterator];
-        //             }
-        //             int cmd_two_pos = 0;
-        //             for (buffer_iterator = pos + 1; buffer_iterator < tokens_list; buffer_iterator++)
-        //             {
-        //                 second_shell_command[cmd_two_pos] = tokens[buffer_iterator];
-        //                 cmd_two_pos++;
-        //             }
-        //             if (execute_dual_cmd(first_shell_command, second_shell_command) == 0)
-        //             {
-        //                 break;
-        //             }
-        //         }
 
-        //         printf("I am here 4\n");
-
-        //         /* One command exists: Execute the single command */
-        //         if (piped_input == 0)
-        //         {
-        //             if (execute_single_cmd(tokens) == 0)
-        //             {
-        //                 break;
-        //             }
-        //         }
     }
-    printf("'Fortune favors the prepared mind.'  –  Louis Pasteur\n");
+    printf("'Fortune favors the prepared mind.'\n\t–  Louis Pasteur\n");
     return 0;
 }
 
 /**
- * Finds the next word in the string. For example, given an input of "  my cake" the function should return "my cake".
+ * find_word_start - finds the next word in the string
  * @str: user input string
  **/
 char *find_word_start(char *str)
@@ -137,7 +128,7 @@ char *find_word_start(char *str)
 
 
 /**
- * Finds the end of current word. For example, given an input of "my cake" the function should return " cake".
+ * find_word_end - finds the end of current word
  * @str: user input string
  **/
 char *find_word_end(char *str)
@@ -155,7 +146,7 @@ char *find_word_end(char *str)
 
 
 /**
- * Counts the number of words in the string argument.
+ * count_words - counts the number of words in the string argument
  * @str: user input string
  **/
 int count_words(char* str)
@@ -185,7 +176,7 @@ int count_words(char* str)
 
 
 /**
- * Tokenizes the string argument into an array of tokens.
+ * tokenize - tokenizes the string argument into an array of tokens
  * @str: user input string
  **/
 char **tokenize(char *str)
@@ -207,7 +198,7 @@ char **tokenize(char *str)
 
 
 /**
- * Counts the number of characters in the string argument.
+ * string_length - counts the number of characters in the string argument
  * @str: user input string
 */
 int string_length(char *str)
@@ -240,7 +231,10 @@ char is_valid_character(char c)
         return 0;
 }
 
-/* Prints all tokens. */
+/**
+ * print_tokens - prints all tokens.
+ * @tokens: the array containing the tokens
+ **/
 void print_tokens(char **tokens)
 {
     int pos = 0;
@@ -251,10 +245,12 @@ void print_tokens(char **tokens)
     }
 }
 
-/* Frees all tokens and the array containing the tokens. */
+/**
+ * free_tokens - frees all tokens and the array containing the tokens
+ * @tokens: the array containing the tokens
+ **/
 void free_tokens(char **tokens)
 {
-    // Daniel (Instructor): "free" is a keyword. Don't reinvent the wheel
     int pos = 0;
     while (tokens[pos])
     {
@@ -265,7 +261,10 @@ void free_tokens(char **tokens)
     free(tokens);
 }
 
-/* Copy Parameter & return */
+/**
+ * token_copy - copy parameter & return
+ * @tokens: word from user string
+ **/
 char *token_copy(char *tokens)
 {
     char *str_copy_1 = tokens;

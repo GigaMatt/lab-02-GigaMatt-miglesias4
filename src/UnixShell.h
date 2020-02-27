@@ -34,14 +34,31 @@ int execute_single_cmd(char **tokens);
 /* Executes two (2) user commands by piping (system call) the processes, invoking 'execvp' */
 int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command);
 
+/* Finds the next word in the string */
 char *find_word_start(char *str);
+
+/*  */
 char *find_word_end(char *str);
+
+/*  */
 int count_words(char* str);
+
+/*  */
 char **tokenize(char *str);
+
+/*  */
 int string_length(char *str);
+
+/*  */
 char is_valid_character(char c);
+
+/*  */
 void print_tokens(char **tokens);
+
+/*  */
 void free_tokens(char **tokens);
+
+/*  */
 char *token_copy(char *tokens);
 
 #endif

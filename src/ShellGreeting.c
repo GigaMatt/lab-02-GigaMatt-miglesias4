@@ -10,14 +10,13 @@
 
 /**
  * shell_greeting - greets user similar to UTEP CS 3432 VM greeting
- * 
  **/
 void shell_greeting()
 {
     /* Display Initial Greeting */
     //clear();
-    printf("Welcome to our Unix Shell\n\t – TheMatts™\n");
-    printf("'Luck is what happens when preparation meets opportunity.'\n\t – Seneca.™\n");
+    printf("Welcome to our Unix Shell\n\t– TheMatts™\n");
+    printf("'Luck is what happens when preparation meets opportunity.'\n\t– Seneca.™\n");
 }
 
 /**
