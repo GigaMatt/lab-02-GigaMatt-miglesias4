@@ -10,43 +10,41 @@
 
 int main()
 {
+    /* Reset variables before every input */
+    int tokens_list, pos, user_exit, piped_command, cmd_one_length, buffer_iterator, piped_input = 0;
+    char buffer[MAX + 1], *tokens[MAX + 1];
+    char *first_shell_command[MAX + 1] = {0}, *second_shell_command[MAX + 1] = {0};
     /* Display greeting similar to UTEP CS 3432 VM greeting */
     shell_greeting();
 
     /* Run shell until user terminates program*/
     while (1)
     {
-        /* Reset variables before every input */
-        int tokens_list, pos, user_exit, piped_command, cmd_one_length, buffer_iterator, piped_input = 0;
-        char *buffer[MAX + 1], **tokens[MAX + 1];
-        char *first_shell_command[MAX + 1] = {0}, *second_shell_command[MAX + 1] = {0};
-
         // DECLARE ENVIRONMENT HERE?
 
         /* Display user input prompt */
-        display_prompt();
+        //display_prompt();
+        printf("$");
 
-        char *user_input = fgets(*buffer, sizeof(*buffer), stdin);
+        char *user_input = fgets(buffer, sizeof(buffer), stdin);
         if (user_input == NULL)
         {
             break;
         }
 
         /* Get List of Tokens */
-        tokens_list = parse_user_input(*buffer, *tokens);
+        tokens_list = parse_user_input(buffer, tokens);
 
         /* Check for user terminating program*/
-        user_exit = strcmp(*tokens[0], exit_cmd);
+        user_exit = strcmp(tokens[0], "exit");
         if (user_exit == 1)
-        {
             printf("Terminating shell.\n");
             break;
-        }
 
         /* Check for user piping commands */
         for (pos = 0; pos < tokens_list; pos++)
         {
-            piped_input = strcmp(*tokens[pos], "|");
+            piped_input = strcmp(tokens[pos], "|");
             if (piped_input == 1)
             {
                 cmd_one_length = pos;
@@ -76,7 +74,7 @@ int main()
         /* One command exists: Execute the single command */
         if (piped_input == 0)
         {
-            if (execute_single_cmd(*tokens) == 0)
+            if (execute_single_cmd(tokens) == 0)
             {
                 break;
             }

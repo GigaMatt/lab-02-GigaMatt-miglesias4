@@ -18,7 +18,7 @@
 #include <sys/wait.h>
 
 #define MAX 300
-char *change_dir_cmd = "cd", *exit_cmd = "exit";
+//char *change_dir_cmd = "cd", *exit_cmd = "exit";
 
 /* Greets user similar to UTEP CS 3432 VM greeting */
 void shell_greeting();
