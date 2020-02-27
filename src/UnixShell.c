@@ -1,55 +1,85 @@
 /*
- * CS 170 - Theory of Operating Systems
+ * CS 4375 - Theory of Operating Systems
  * By: Matthew Iglesias (ID: 80591632)
  * By: Matthew S Montoya (ID: 88606727)
- * Purpose: 
- * Last Modified: 25 February 2020
- * 
- * NOTES: DUE TO ISSUES WITH GUTHUB CLASSROOM, THIS REPOSITORY IS PRIVATE UNTIL 01 MARCH 2020
+ * Purpose: To build a user shell for a Unix operating system
+ * Last Modified: 28 February 2020
 */
 
-
 #include "UnixShell.h"
-#define MAX 100
-char *change_dir_cmd = "cd", *exit_cmd = "exit";
 
-/**
- * Runner executing the program
- * @argc: Number of Arguments
- * @argv: Pointer to $PS1 Prompt
- * @env: PATH / Environment Variables
- **/ 
-int main(int argc, char **argv, char **env)
+int main()
 {
-    char *buffer, **cmds, *parameter[20];
-    int length, char_string;
+    /* Display greeting similar to UTEP CS 3432 VM greeting */
+    shell_greeting();
 
-    /* Store $PS1 Value */
-    char *ps1_prompt, *ps1_value;
-    ps1_prompt = argv[1];
-    ps1_value = getenv(ps1_prompt);
+    /* Run shell until user terminates program*/
+    while (1)
+    {
+        /* Reset variables before every input */
+        int tokens_list, pos, user_exit, piped_command, cmd_one_length, buffer_iterator, piped_input = 0;
+        char *buffer[MAX + 1], **tokens[MAX + 1];
+        char *first_shell_command[MAX + 1] = {0}, *second_shell_command[MAX + 1] = {0};
 
-    char *envp = {(char *) "PATH=/bin",0};
+        // DECLARE ENVIRONMENT HERE?
 
-    /* Loop through shell until user exits*/
-    while(1){
-        /* Display Shell to User */
-        shell_greeting(*ps1_prompt, *ps1_value);
+        /* Display user input prompt */
+        display_prompt();
 
-        /* Read/Parses User Input*/
-        user_input(buffer);
-
-        /* Execute Use Command */
-        execute_command(cmds);  // Will also 
-
-        if(strcmp(argv, "exit") == 0){
+        char *user_input = fgets(*buffer, sizeof(*buffer), stdin);
+        if (user_input == NULL)
+        {
             break;
         }
-        else{
-            strcpy(argc, "/bin/");
-            strcat(argc, argv);
 
-            execve(argc,parameter,envp); //Execute Command
+        /* Get List of Tokens */
+        tokens_list = parse_user_input(*buffer, **tokens);
+
+        /* Check for user terminating program*/
+        user_exit = strcmp(**tokens[0], exit_cmd);
+        if (user_exit == 1)
+        {
+            printf("Terminating shell.\n");
+            break;
+        }
+
+        /* Check for user piping commands */
+        for (pos = 0; pos < tokens_list; pos++)
+        {
+            piped_input = strcmp(**tokens[pos], "|");
+            if (piped_input == 1)
+            {
+                cmd_one_length = pos;
+                break;
+            }
+        }
+
+        /* Two commands exist: Separate & execute the two commands */
+        if (piped_input == 1)
+        {
+            for (buffer_iterator = 0; buffer_iterator < cmd_one_length; buffer_iterator++)
+            {
+                *first_shell_command[buffer_iterator] = **tokens[buffer_iterator];
+            }
+            int cmd_two_pos = 0;
+            for (buffer_iterator = pos + 1; buffer_iterator < tokens_list; buffer_iterator++)
+            {
+                *second_shell_command[cmd_two_pos] = **tokens[buffer_iterator];
+                cmd_two_pos++;
+            }
+            if (execute_dual_cmd(*first_shell_command, *second_shell_command) == 0)
+            {
+                break;
+            }
+        }
+
+        /* One command exists: Execute the single command */
+        if (piped_input == 0)
+        {
+            if (execute_single_cmd(**tokens) == 0)
+            {
+                break;
+            }
         }
     }
     return 0;

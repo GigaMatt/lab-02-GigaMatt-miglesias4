@@ -1,122 +1,123 @@
 /*
- * CS 170 - Theory of Operating Systems
+ * CS 4375 - Theory of Operating Systems
  * By: Matthew Iglesias (ID: 80591632)
  * By: Matthew S Montoya (ID: 88606727)
- * Purpose: 
- * Last Modified: 25 February 2020
- * 
- * NOTES: DUE TO ISSUES WITH GUTHUB CLASSROOM, THIS REPOSITORY IS PRIVATE UNTIL 01 MARCH 2020
+ * Purpose: To build a user shell for a Unix operating system
+ * Last Modified: 28 February 2020
 */
+
 #include "UnixShell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#define LSH_RL_BUFSIZE 1024
 
 /**
- * Retrieve User Shell Commands and perform the parse function by each line. Then this function will return the command
- * which then will be sent to the ExecuteCommand.c file under the execute_command function to execute the user's desired command.
- * @input_value: user command
- **/
-char *user_input(char *input_value)
+ * parse_user_input - creates a list of words based on user input
+ * @buffer: the string of input the user fed to the shell
+ * @tokens: the list of words extracted from buffer.
+ * 
+ * Return: exit/error code associated with running the users command(s)
+ */
+int parse_user_input(char *buffer, char **tokens)
 {
-    char *buffer = NULL;
-    ssize_t buffer_size = 0; //ssize_t integrates return value of valid size (includes negative values)
-    getline(&buffer, &buffer_size, stdin); //getline() will allocate memory using buffer_
-    //buffer is the read line
-
-    //Performing parse on each line of the user_input value
-    char **tokens = tokenize(buffer);
-
-    //Switch case statements in execute_command in ExecuteCommand.c file
-    return tokens;
-}
-
-/* This function uses user input line and performs tokenization to determine command variable and parameter variable */ 
-char *tokenize(char *line){
-    int pos = 0, token_length = count_tokens(line);
-    char** tokens = (char**) malloc((token_length+1) * sizeof(char*));
-
-    while(pos < token_length)
+    int pos, tokens_list = -1;
+    for (pos = 0; pos < MAX; pos++)
     {
-        line = find_word_start(line);
-        char* tokenized_word = token_copy(line);
-        line = find_word_end(line);
-        tokens[pos] = tokenized_word;
-
-        pos++;
+        *tokens[pos] = strsep(&buffer, " ");
+        tokens_list++;
+        if (tokens[pos] == NULL)
+            break;
     }
-    return tokens;
+    return (tokens_list);
 }
 
-/* This function determines if each character in the user input line is valid */
-char is_Valid_Char(char user_input_char){
+/**
+ * execute_single_cmd - executes single user command, invoking 'execvp'.
+ * @tokens: the list of words (command + flags) the user wants to run
+ * 
+ * Return: exit/error code associated with running the users command(s)
+ */
+int execute_single_cmd(char **tokens)
+{
 
-    if(user_input_char == 124){
-        pipe_cmd = 1; // There is a pipe (|) in the user's argument
+    /* Fork the process */
+    pid_t subprocess = fork();
+
+    /* An issue occured while forking */
+    if (subprocess < 0)
+    {
+        printf("Fork Failed. Quitting Program.\n");
+        return (1);
     }
-    // Special Characters: includes " " and up to 126
-    if (user_input_char >= 32 & user_input_char <= 126){
-        return 1;
-    }
-    else{
+
+    /* Run the child process */
+    else if (subprocess == 0)
+    {
+
+        /* Execute User Command*/
+        execvp(tokens[0], tokens);
+        char *error = strerror(errno);
+        //printf("unknown command\n");
         return 0;
     }
-    return;
+
+    /* Run the parent process */
+    else
+    {
+        int childstatus;
+        waitpid(subprocess, &childstatus, 0);
+        return 1;
+    }
 }
 
-/* This function counts the number of tokens from the user input line */
-char count_tokens(char *user_cmd_token){
-    int cmd_count = 0, param_count = 0, num_words = 1;
-    while(is_Valid_Char(user_cmd_token[param_count])==0)
-    {
-        cmd_count++;
-        param_count++;
-    }
-    param_count = string_length(user_cmd_token);
-
-    while(is_Valid_Char(user_cmd_token[param_count])== 0)
-    {
-        param_count--;
-    }
-
-    // Find the difference to separate out the words
-    while(cmd_count < param_count)
-    {
-        if((is_Valid_Char(user_cmd_token[cmd_count])==0) && (is_Valid_Char(user_cmd_token[cmd_count+1])==1))
-            num_words++;
-        cmd_count++;
-    }
-    return num_words;
-}
-
-/* Finds the first token character in the token */
-char *find_token_start(char *token_str)
+/**
+ * execute_dual_cmd - executes two (2) user commands by piping (system call) the processes, invoking 'execvp'.
+ * @first_shell_command: the first command (command+flags) the user wants to run
+ * @second_shell_command: the second command (command+flags) the user wants to run
+ * 
+ * Return: exit/error code associated with running the users command(s)
+ */
+int execute_dual_cmd(char **first_shell_command, char **second_shell_command)
 {
-    if (count_words(token_str) > 0)
-    {                                // Determine if more than zero strings exist
-        char *temp_char_array = token_str; // Duplicate array for checking
-        while (*temp_char_array)
-        {
-            if ((is_Valid_Char(temp_char_array[0])) == 1)
-            {                           
-                return temp_char_array; // Return the next string, beginning with valid chars
-            }
-            *temp_char_array++;
-        }
-    }
-    return token_str; // Return original array if no valid chars exist
-}
 
-/* Finds the end of current token */
-char *find_token_end(char *token_str)
-{
-    while (is_Valid_Char(*token_str))
-    {
-        token_str++;
-        if (*token_str == 32)
-        {
-            return token_str; // Return the end of current string
-        }
+    /* Create Pipe */
+    int pid[2];
+    pipe(pid);
+
+    /* An issue occured while piping */
+    if(pid < 0){
+        printf("Pipe Failed. Quitting Program.\n");
+        return(1);
     }
-    return "0"; // Return original array if no valid chars exist
+
+    /* Fork the process */
+    pid_t subprocess = fork();
+
+    /* An issue occured while forking */
+    if (subprocess < 0)
+    {
+        printf("Fork Failed. Quitting Program.\n");
+        return (1);
+    }
+
+    /* Run the child process */
+    else if (subprocess == 0)
+    {
+        close(pid[1]);
+        dup2(pid[0], 0);
+        //close(pid[0]);
+
+        execvp(second_shell_command[0], second_shell_command);
+        char *error = strerror(errno);
+        return 0;
+    }
+
+    /* Run the parent process */
+    else
+    {
+        close(pid[0]);
+        dup2(pid[1], 1);
+        //close(pid[1]);
+
+        execvp(first_shell_command[0], first_shell_command);
+        char *error = strerror(errno);
+        return 0;
+    }
 }

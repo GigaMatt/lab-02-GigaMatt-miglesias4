@@ -1,9 +1,11 @@
-all: p1-fork p2-wait p3-exec p4-redirect
+# \
+CS 4375 - Theory of Operating Systems\
+By: Matthew Iglesias (ID: 80591632)\
+By: Matthew S Montoya (ID: 88606727)\
+Purpose: To build a user shell for a Unix operating system\
+Last Modified: 28 February 2020
 
-p1-fork: p1-fork.o
-p2-wait: p2-wait.o
-p3-exec: p3-exec.o
-p4-redirect: p4-redirect.o
-
+unixshell.o: UnixShell.c UserInput.c ShellGreeting.c
+	gcc UnixShell.c UserInput.c ShellGreeting.c -o unixshell.o
 clean:
-	rm -f *.o p1-fork p2-wait p3-exec p4-redirect p4-output.txt
+	rm -f *.o
