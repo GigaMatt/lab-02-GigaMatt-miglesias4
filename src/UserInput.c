@@ -74,7 +74,7 @@ int execute_single_cmd(char **tokens)
  * 
  * Return: exit/error code associated with running the users command(s)
  */
-int execute_dual_cmd(char **first_shell_command, char **second_shell_command)
+int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
 {
 
     /* Create Pipe */

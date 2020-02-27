@@ -33,6 +33,6 @@ int parse_user_input(char *buffer, char **tokens);
 int execute_single_cmd(char **tokens);
 
 /* Executes two (2) user commands by piping (system call) the processes, invoking 'execvp' */
-int execute_dual_cmd(char **first_shell_command, char **second_shell_command);
+int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command);
 
 #endif

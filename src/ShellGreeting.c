@@ -15,7 +15,7 @@
 void shell_greeting()
 {
     /* Display Initial Greeting */
-    clear();
+    //clear();
     printf("Welcome to our Unix Shell\n\t – TheMatts™\n");
     printf("'Luck is what happens when preparation meets opportunity.'\n\t – Seneca.™\n");
 }

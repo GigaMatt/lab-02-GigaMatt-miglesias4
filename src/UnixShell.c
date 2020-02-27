@@ -33,10 +33,10 @@ int main()
         }
 
         /* Get List of Tokens */
-        tokens_list = parse_user_input(*buffer, **tokens);
+        tokens_list = parse_user_input(*buffer, *tokens);
 
         /* Check for user terminating program*/
-        user_exit = strcmp(**tokens[0], exit_cmd);
+        user_exit = strcmp(*tokens[0], exit_cmd);
         if (user_exit == 1)
         {
             printf("Terminating shell.\n");
@@ -46,7 +46,7 @@ int main()
         /* Check for user piping commands */
         for (pos = 0; pos < tokens_list; pos++)
         {
-            piped_input = strcmp(**tokens[pos], "|");
+            piped_input = strcmp(*tokens[pos], "|");
             if (piped_input == 1)
             {
                 cmd_one_length = pos;
@@ -59,15 +59,15 @@ int main()
         {
             for (buffer_iterator = 0; buffer_iterator < cmd_one_length; buffer_iterator++)
             {
-                *first_shell_command[buffer_iterator] = **tokens[buffer_iterator];
+                first_shell_command[buffer_iterator] = tokens[buffer_iterator];
             }
             int cmd_two_pos = 0;
             for (buffer_iterator = pos + 1; buffer_iterator < tokens_list; buffer_iterator++)
             {
-                *second_shell_command[cmd_two_pos] = **tokens[buffer_iterator];
+                second_shell_command[cmd_two_pos] = tokens[buffer_iterator];
                 cmd_two_pos++;
             }
-            if (execute_dual_cmd(*first_shell_command, *second_shell_command) == 0)
+            if (execute_dual_cmd(first_shell_command, second_shell_command) == 0)
             {
                 break;
             }
@@ -76,7 +76,7 @@ int main()
         /* One command exists: Execute the single command */
         if (piped_input == 0)
         {
-            if (execute_single_cmd(**tokens) == 0)
+            if (execute_single_cmd(*tokens) == 0)
             {
                 break;
             }
