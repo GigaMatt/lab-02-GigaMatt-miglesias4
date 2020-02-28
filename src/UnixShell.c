@@ -85,22 +85,7 @@ int main()
                 posi++;
             }
             printf("\n");
-
-            // int cmd_two_pos = 0;
-            // for (buffer_iterator = pos + 1; buffer_iterator < word_length; buffer_iterator++)
-            // {
-            //     second_shell_command[cmd_two_pos] = user_tokens[buffer_iterator];
-            //     cmd_two_pos++;
-            // }
-            // if (execute_dual_cmd(first_shell_command, second_shell_command) == 0)
-            // {
-            //     break;
-            // }
         }
-
-        printf("I am here 4\n");
-
-
     }
     printf("'Fortune favors the prepared mind.'\n\t–  Louis Pasteur\n");
     return 0;
