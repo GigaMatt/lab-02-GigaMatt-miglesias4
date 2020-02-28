@@ -130,7 +130,6 @@ char *find_word_end(char *str)
     return "0"; // Return original array if no valid chars exist
 }
 
-
 /**
  * count_words - counts the number of words in the string argument
  * @str: user input string
@@ -160,7 +159,6 @@ int count_words(char* str)
     return num_words;
 }
 
-
 /**
  * tokenize - tokenizes the string argument into an array of tokens
  * @str: user input string
@@ -182,7 +180,6 @@ char **tokenize(char *str)
     return tokens;
 }
 
-
 /**
  * string_length - counts the number of characters in the string argument
  * @str: user input string
@@ -198,7 +195,6 @@ int string_length(char *str)
     }
     return num_chars-1;
 }
-
 
 /** Evaluates if the character c is an acceptable character for
  * a token. Acceptable characters include any alphanumeric or
