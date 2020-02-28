@@ -37,28 +37,28 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command);
 /* Finds the next word in the string */
 char *find_word_start(char *str);
 
-/*  */
+/* Finds the end of current word */
 char *find_word_end(char *str);
 
-/*  */
+/* Counts the number of words in the string argument */
 int count_words(char* str);
 
-/*  */
+/* Tokenizes the string argument into an array of tokens */
 char **tokenize(char *str);
 
-/*  */
+/* Counts the number of characters in the string argument */
 int string_length(char *str);
 
-/*  */
+/* Evaluates if the character c is an acceptable character for a token */
 char is_valid_character(char c);
 
-/*  */
+/* Prints all tokens */
 void print_tokens(char **tokens);
 
-/*  */
+/* Frees all tokens and the array containing the tokens */
 void free_tokens(char **tokens);
 
-/*  */
+/* Copy token parameter */
 char *token_copy(char *tokens);
 
 #endif
