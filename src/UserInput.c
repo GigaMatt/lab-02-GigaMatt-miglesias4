@@ -7,6 +7,8 @@
 */
 
 #include "UnixShell.h"
+#include <stdio.h>
+#include <dirent.h>
 
 
 /**
@@ -17,6 +19,8 @@
  */
 int execute_single_cmd(char **tokens)
 {
+    DIR *dr = opendir("."); //Returns a pointer to the directory type
+    struct dirent *directory_pointer; //Pointer for entering directory
 
     /* User wants to change directories */
     if(strcmp(tokens[0], "cd") == 0){
@@ -25,6 +29,18 @@ int execute_single_cmd(char **tokens)
 
         /* Return error code associated with failed command*/
         if(exit_code != 0) return exit_code;
+    }
+
+    /* User wants to view list of files in the current directory */
+    if(strcmp(tokens[0], "ls") == 0){
+
+        if(dr == NULL){
+            printf("No directory found.");
+        }
+        while((directory_pointer = readdir(dr)) != NULL){
+            printf("%s\n",directory_pointer->d_name);
+        }
+        closedir(dr);
     }
 
     //execvp
