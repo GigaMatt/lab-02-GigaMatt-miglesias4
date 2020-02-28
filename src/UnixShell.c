@@ -7,6 +7,7 @@
 */
 
 #include "UnixShell.h"
+#define PATH "/usr/local/bin"
 
 int main()
 {
