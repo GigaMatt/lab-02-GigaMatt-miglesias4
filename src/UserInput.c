@@ -43,36 +43,38 @@ int execute_single_cmd(char **tokens)
         closedir(dr);
     }
 
-    //execvp
+    /* Fork the process */
+    pid_t subprocess = fork();
 
-    // /* Fork the process */
-    // pid_t subprocess = fork();
+    /* An issue occured while forking */
+    if (subprocess < 0)
+    {
+        printf("Fork Failed. Quitting Program.\n");
+        return (1);
+    }
 
-    // /* An issue occured while forking */
-    // if (subprocess < 0)
-    // {
-    //     printf("Fork Failed. Quitting Program.\n");
-    //     return (1);
-    // }
+    /* Run the child process */
+    else if (subprocess == 0)
+    {
+        /* Execute User Command*/
+        if(execvp(tokens[0], tokens) == -1){
+            printf("Unknown Command.\n");
+        }
+        return 0;
+    }
 
-    // /* Run the child process */
-    // else if (subprocess == 0)
-    // {
-
-    //     /* Execute User Command*/
-    //     execvp(tokens[0], tokens);
-    //     char *error = strerror(errno);
-    //     //printf("unknown command\n");
-    //     return 0;
-    // }
-
-    // /* Run the parent process */
-    // else
-    // {
-    //     int childstatus;
-    //     waitpid(subprocess, &childstatus, 0);
-    //     return 1;
-    // }
+    /* Run the parent process */
+    else
+    {
+        int childstatus;
+        waitpid(subprocess, &childstatus, 0);
+        
+        /* Execute User Command*/
+        if(execvp(tokens[0], tokens) == -1){
+            printf("Unknown Command.\n");
+        }
+        return 1;
+    }
 }
 
 /**
@@ -110,9 +112,9 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
     {
         close(pid[1]);
         dup2(pid[0], 0);
-        //close(pid[0]);
+        close(pid[0]);
 
-        if(execvp(second_shell_command[0], second_shell_command) == -1){
+        if(execvp(second_shell_command[0], second_shell_command) < 0){
             printf("error");
         }
         char *error = strerror(errno);
@@ -124,9 +126,9 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
     {
         close(pid[0]);
         dup2(pid[1], 1);
-        //close(pid[1]);
+        close(pid[1]);
 
-        if(execvp(second_shell_command[0], second_shell_command) == -1){
+        if(execvp(second_shell_command[0], second_shell_command) < 0){
             printf("error");
         }
 
@@ -134,14 +136,3 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
         return 0;
     }
 }
-
-// /**
-//  * change_dir - changes the current working directory path specified by the user
-//  * @tokens: the list of words (command + flags) the user wants to run
-//  * 
-//  * Return: exit/error code associated with running the users command(s)
-//  */
-// int change_dir(char ** tokens){
-//     int exit_code = chdir(tokens[1]);
-//     return exit_code;
-// }

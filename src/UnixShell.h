@@ -22,9 +22,6 @@
 /* Greets user similar to UTEP CS 3432 VM greeting */
 void shell_greeting();
 
-/* Displays prompt for user to enter command */
-void display_prompt();
-
 /* Creates a list of words based on user input */
 char parse_user_input(char *buffer);
 
