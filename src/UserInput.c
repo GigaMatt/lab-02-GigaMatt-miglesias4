@@ -9,6 +9,7 @@
 #include "UnixShell.h"
 #include <stdio.h>
 #include <dirent.h>
+#define PATH "/usr/local/bin"
 
 
 /**
@@ -113,7 +114,7 @@ int execute_dual_cmd(char ** first_shell_command, char ** second_shell_command)
         close(pid[1]);
         dup2(pid[0], 0);
         close(pid[0]);
-
+        setenv(PATH,PATH,0);
         if(execvp(second_shell_command[0], second_shell_command) < 0){
             printf("error");
         }
